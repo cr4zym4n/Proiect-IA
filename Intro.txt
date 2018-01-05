@@ -1,0 +1,3 @@
+Proiect Inteligenta Artificiala
+
+X si 0 folosind algoritmul minimax si retezarea alfa beta
