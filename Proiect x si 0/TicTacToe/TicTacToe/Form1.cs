@@ -15,7 +15,7 @@ namespace TicTacToe
         int index1;
         int choice = 1;
         char[] board = { ' ',' ',' ',' ',' ',' ',' ',' ',' ' };// Single array represents the board '*' means empty box in board
-        public int isFull()// Board is full
+        public int isFull()// Tabla e plina
         {
 	        for (int i = 0; i<9; i++)
 	        {
@@ -29,7 +29,7 @@ namespace TicTacToe
 	        }
 	        return 1;
         }
-        public int user_won()//Checks whether user has won
+        public int user_won()// Verifica daca utilizatorul a castigat
         {
             for (int i = 0; i < 9; i += 3) //se verfica pe linii
             {
@@ -41,17 +41,17 @@ namespace TicTacToe
                 if ((board[i] == board[i + 3]) && (board[i + 3] == board[i + 6]) && (board[i] == 'O'))
                     return 1;
             }
-            if ((board[0] == board[4]) && (board[4] == board[8]) && (board[0] == 'O'))//diagonala
+            if ((board[0] == board[4]) && (board[4] == board[8]) && (board[0] == 'O'))//diagonala sus-jos stanga dreapta
             {
                 return 1;
             }
-            if ((board[2] == board[4]) && (board[4] == board[6]) && (board[2] == 'O'))//diagonala
+            if ((board[2] == board[4]) && (board[4] == board[6]) && (board[2] == 'O'))//diagonala sus-jos dreapta stanga
             {
                 return 1;
             }
             return 0;
         }
-        public int cpu_won()// Checks whether CPU has won
+        public int cpu_won()// Verifica daca a castigat CPU
         {
             for (int i = 0; i < 9; i += 3)
             {
@@ -73,7 +73,7 @@ namespace TicTacToe
             }
             return 0;
         }
-        public int minimax(bool flag)// The minimax function
+        public int minimax(bool flag)// Algoritmul MINIMAX cu retezarea Alfa-Beta
         {
 	        if (cpu_won() == 1)
 	        {
@@ -89,7 +89,7 @@ namespace TicTacToe
 	        }
 
 
-	        int[] score = { 1,1,1, 1,1,1, 1,1,1 };//if score[i]=1 then it is empty
+	        int[] score = { 1,1,1, 1,1,1, 1,1,1 };//daca score[i]=1 -> e gol
 
 	        int max_val = -1000,//alfa
 		        min_val = 1000;//beta
@@ -133,7 +133,6 @@ namespace TicTacToe
 		        
 		        return max_val; //se returneaza valoarea maxima
 
-		
 	        }
 	        else // (flag == false) //daca este randul lui 0
 	        {
@@ -150,9 +149,8 @@ namespace TicTacToe
 		        
 		        return min_val;
 	        }
-            //return -9999;
         }
-        public void draw_board() //display tic-tac-toe board
+        public void draw_board() //afisare tabela
         {
             button1.Text = board[0].ToString();
             button2.Text = board[1].ToString();
@@ -190,7 +188,7 @@ namespace TicTacToe
         }
         public void CPUMove()
         {
-            //cout << endl << "CPU MOVE....";
+            // Miscare CPU
             minimax(true);
             board[index1] = 'X';
             draw_board();
@@ -202,67 +200,71 @@ namespace TicTacToe
                                  );
                 DisableButtons();
             }
-            if (isFull() == 1)
-            {
-                Console.WriteLine("Draw....");
-                MessageBox.Show("Remiza!", " ",
-                                 MessageBoxButtons.OK
-                                 );
-                DisableButtons();
+            else {
+                if (isFull() == 1)
+                {
+                    Console.WriteLine("Draw....");
+                    MessageBox.Show("Remiza!", " ",
+                                     MessageBoxButtons.OK
+                                     );
+                    DisableButtons();
+                }
             }
+            
         }
         public void OnMove(int move)
         {
-                //cout << endl << "Enter the move:";
-                //cin >> move;
+            // Miscare Jucator
                 if (board[move - 1] == ' ')
                 {
                     board[move - 1] = 'O';
                     draw_board();
                 }
-              
+
                 if (user_won() == 1)
                 {
-                    Console.WriteLine("You Won......");
                     MessageBox.Show("Ai castigat!", " ",
                                  MessageBoxButtons.OK
                                  );
                     DisableButtons();
                 }
-                if (isFull() == 1)
+                else
                 {
-                    Console.WriteLine("Draw....");
-                    MessageBox.Show("Remiza!", " ",
-                                 MessageBoxButtons.OK
-                                 );
-                    DisableButtons();
+                    if (isFull() == 1)
+                    {
+                        MessageBox.Show("Remiza!", " ",
+                                     MessageBoxButtons.OK
+                                     );
+                        DisableButtons();
+                    }
                 }
             }
         public Form1()
         {
             InitializeComponent();
-            DisableButtons();
+            DisableButtons(); // Initial, butoanele sunt disabled
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
             // Start Game
             EnableButtons();
-            Console.WriteLine("-------------------------TIC TAC TOE-----------------------------------------------------");
-            Console.WriteLine("USER--->(O)      CPU------>(X)");
-            Console.WriteLine(" 1-> Player first 2-> CPU first:");
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++) // Golire tabela
             {
                 board[i] = Convert.ToChar(" ");
             }
-                if (choice == 1)
-                {
-                    draw_board();
-                }
-                else
-                {
-                    CPUMove();
-                }
+            if (choice == 1)
+            {
+                draw_board();
+            }
+            else
+            {
+                Random r = new Random();
+                int rInt = r.Next(0, 8);
+                board[rInt] = 'X'; // sa inceapa random prima miscare
+                draw_board();
+                // CPUMove;
+            }
             
         }
 
